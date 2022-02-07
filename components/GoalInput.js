@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, TextInput, Button, StyleSheet } from 'react-native'
+import { View, TextInput, Button, StyleSheet, Modal } from 'react-native'
 
 const GoalInput = props => {
 	const [enteredGoal, setEnteredGoal] = useState('')
@@ -7,30 +7,56 @@ const GoalInput = props => {
 	const handleGoalInput = enteredText => {
 		setEnteredGoal(enteredText)
 	}
+
+	const addGoalHandlerButton = () => {
+		props.onAddGoal(enteredGoal)
+		setEnteredGoal('')
+	}
+
 	return (
-		<View style={styles.textAreaContainer}>
-			<TextInput
-				placeholder='Course Goals'
-				style={styles.textArea}
-				onChangeText={handleGoalInput}
-				value={enteredGoal}
-			/>
-			<Button title='ADD' onPress={() => props.onAddGoal(enteredGoal)} />
-		</View>
+		<Modal visible={props.visible} animationType='slide'>
+			<View style={styles.textAreaContainer}>
+				<TextInput
+					placeholder='What are your goals?'
+					style={styles.textArea}
+					onChangeText={handleGoalInput}
+					value={enteredGoal}
+				/>
+				<View style={styles.buttonsContainer}>
+					<View style={styles.button}>
+						<Button title='CANCEL' color='#ccc' onPress={props.onCancel} />
+					</View>
+					<View style={styles.button}>
+						<Button title='ADD' onPress={addGoalHandlerButton} />
+					</View>
+				</View>
+			</View>
+		</Modal>
 	)
 }
 
 const styles = StyleSheet.create({
 	textAreaContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignContent: 'center'
+		flex: 1,
+		justifyContent: 'center',
+		alignContent: 'center',
+		alignItems: 'center'
 	},
 	textArea: {
 		borderColor: 'black',
 		borderWidth: 1,
 		padding: 10,
-		width: '80%'
+		width: '80%',
+		marginBottom: 10
+	},
+	buttonsContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		width: '60%'
+	},
+	button: {
+		width: '50%'
 	}
 })
 

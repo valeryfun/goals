@@ -4,7 +4,6 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	TextInput,
 	Button,
 	ScrollView,
 	FlatList
@@ -14,12 +13,14 @@ import GoalInput from './components/GoalInput'
 
 export default function App() {
 	const [courseGoals, setCourseGoals] = useState([])
+	const [showModal, setShowModal] = useState(false)
 
 	const addGoalhandler = goalTitle => {
 		setCourseGoals(currentGoals => [
 			...currentGoals,
 			{ id: Math.random().toString(), value: goalTitle }
 		])
+		setShowModal(false)
 	}
 
 	const removeGoalHandler = goalId => {
@@ -28,9 +29,22 @@ export default function App() {
 		})
 	}
 
+	const showModalHandler = () => {
+		setShowModal(true)
+	}
+
+	const cancelHandler = () => {
+		setShowModal(false)
+	}
+
 	return (
 		<View style={styles.container}>
-			<GoalInput onAddGoal={addGoalhandler} />
+			<Button title='Add New Goal' onPress={showModalHandler} />
+			<GoalInput
+				visible={showModal}
+				onAddGoal={addGoalhandler}
+				onCancel={cancelHandler}
+			/>
 			<FlatList
 				keyExtractor={(item, index) => item.id}
 				data={courseGoals}
